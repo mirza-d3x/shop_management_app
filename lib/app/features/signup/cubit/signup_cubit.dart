@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:shop_management_app/repository/auth_repository.dart';
+import 'package:shop_management_app/data/repository/auth_repository.dart';
 import 'package:shop_management_app/utils/console_log.dart';
 
 part 'signup_state.dart';
@@ -32,7 +32,7 @@ class SignupCubit extends Cubit<SignupState> {
   Future<void> submitSignup() async {
     if (formKey.currentState!.validate()) {
       try {
-        emit(const SignupInitial(message: ""));
+        emit(SignupLoading());
         await _authRepository.signUp(
           email: emailController.text.trim(),
           password: passwordController.text.trim(),

@@ -19,21 +19,16 @@ final class AppRoutesFactory implements RoutesFactory {
 
   @override
   Route createAddOrderPageRoute() {
-    // TODO: implement createAddOrderPageRoute
-    throw UnimplementedError();
-  }
-
-  @override
-  Route createAddProductPageRoute() {
     return CustomRoute(
-      builder: AddProductScreenRouteBuilder(),
+      builder: CreateOrderScreenRouteBuilder(),
     );
   }
 
   @override
-  Route createHomeScreePageRoute() {
-    // TODO: implement createHomeScreePageRoute
-    throw UnimplementedError();
+  Route createAddProductPageRoute(Product? product) {
+    return CustomRoute(
+      builder: AddProductScreenRouteBuilder(product: product),
+    );
   }
 
   @override
@@ -55,6 +50,11 @@ final class AppRoutesFactory implements RoutesFactory {
     return CustomRoute(
       builder: SignupScreenRouteBuilder(),
     );
+  }
+
+  @override
+  Route createDashboardScreePageRoute() {
+    return CustomRoute(builder: DashboardScreenRouteBuilder());
   }
 
 //   @override

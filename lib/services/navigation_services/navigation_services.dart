@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shop_management_app/data/models/order_model.dart';
+import 'package:shop_management_app/data/models/product_model.dart';
 
 import 'route_names.dart';
 
@@ -23,10 +25,36 @@ class NavigationServices {
     );
   }
 
-  void createHomePageRoute(BuildContext context) {
+  void createDashboardPageRoute(BuildContext context) {
     Navigator.of(context).pushNamedAndRemoveUntil(
-      RouteNames.home,
+      RouteNames.dashboard,
       (route) => false,
+    );
+  }
+
+  void createProductsPageRoute(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      RouteNames.products,
+    );
+  }
+
+  void createOrdersPageRoute(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      RouteNames.orders,
+    );
+  }
+
+  void createAddProductPageRoute(BuildContext context, Product? product) {
+    Navigator.of(context).pushNamed(
+      RouteNames.addProduct,
+      arguments: product,
+    );
+  }
+
+  void createAddOrderPageRoute(BuildContext context, OrderModel? orderModel) {
+    Navigator.of(context).pushNamed(
+      RouteNames.addOrders,
+      arguments: orderModel,
     );
   }
 

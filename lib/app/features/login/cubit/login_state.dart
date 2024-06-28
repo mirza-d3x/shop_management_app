@@ -8,13 +8,9 @@ sealed class LoginState extends Equatable {
 }
 
 final class LoginInitial extends LoginState {
-  final bool isLoading;
-
-  const LoginInitial({required this.isLoading});
-}
-
-final class LoginCompleted extends LoginState {
   final String message;
 
-  const LoginCompleted({required this.message});
+  const LoginInitial({required this.message});
 }
+
+final class LoginLoading extends LoginState {}

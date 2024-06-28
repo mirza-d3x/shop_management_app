@@ -12,3 +12,5 @@ final class SignupInitial extends SignupState {
 
   const SignupInitial({required this.message});
 }
+
+final class SignupLoading extends SignupState {}

@@ -19,6 +19,10 @@ dependencies:
   http: ^1.2.1
   equatable: ^2.0.5
   get_it: ^7.7.0
+  firebase_storage: ^12.0.1
+  image_picker: ^1.1.2
+  bloc: ^8.1.4
+  flutter_screenutil: ^5.9.3
 
 dev_dependencies:
   flutter_test:

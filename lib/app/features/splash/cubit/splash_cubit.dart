@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shop_management_app/main.dart';
-import 'package:shop_management_app/repository/auth_repository.dart';
+import 'package:shop_management_app/data/repository/auth_repository.dart';
 
 part 'splash_state.dart';
 

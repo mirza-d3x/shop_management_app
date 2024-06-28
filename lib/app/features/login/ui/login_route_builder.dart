@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_management_app/app/features/login/cubit/login_cubit.dart';
 import 'package:shop_management_app/app/features/login/ui/login_screen.dart';
-import 'package:shop_management_app/repository/auth_repository.dart';
+import 'package:shop_management_app/data/repository/auth_repository.dart';
 
 class LoginScreenRouteBuilder {
   final authRepository =

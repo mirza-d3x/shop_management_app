@@ -13,7 +13,7 @@ class SplashScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is SplashInitial) {
           if (state.isLogedIn) {
-            context.navigationService.createHomePageRoute(context);
+            context.navigationService.createDashboardPageRoute(context);
           } else {
             context.navigationService.createLoginPageRoute(context);
           }

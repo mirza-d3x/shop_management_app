@@ -12,72 +12,88 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<LoginCubit>(context);
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Login'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: cubit.formKey,
-          child: Column(
-            children: [
-              CustomTextField(
-                controller: cubit.emailController,
-                label: 'Email',
-                hint: 'Email',
-                obscureText: false,
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Email is required';
-                  } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return 'Enter a valid email';
-                  }
-                  return null;
-                },
+    return BlocListener<LoginCubit, LoginState>(
+      listener: (context, state) {
+        if (state is LoginInitial) {
+          if (state.message == "Success") {
+            context.navigationService.createDashboardPageRoute(context);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
               ),
-              SizedBox(
-                height: 20.h,
-              ),
-              CustomTextField(
-                controller: cubit.passwordController,
-                label: 'Password',
-                hint: 'Password',
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Password is required';
-                  } else if (value.length < 5) {
-                    return 'Password must be at least 5 characters long';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: 200.w,
-                child: CustomElevatedButton(
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  onPressed: () {
-                    cubit.submitLogin();
+            );
+          }
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Login'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: cubit.formKey,
+            child: Column(
+              children: [
+                CustomTextField(
+                  controller: cubit.emailController,
+                  label: 'Email',
+                  hint: 'Email',
+                  obscureText: false,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Email is required';
+                    } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                        .hasMatch(value)) {
+                      return 'Enter a valid email';
+                    }
+                    return null;
                   },
                 ),
-              ),
-              TextButton(
-                child: const Text('Register'),
-                onPressed: () {
-                  context.navigationService.createSignUpPageRoute(context);
-                },
-              ),
-            ],
+                SizedBox(
+                  height: 20.h,
+                ),
+                CustomTextField(
+                  controller: cubit.passwordController,
+                  label: 'Password',
+                  hint: 'Password',
+                  keyboardType: TextInputType.visiblePassword,
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Password is required';
+                    } else if (value.length < 5) {
+                      return 'Password must be at least 5 characters long';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: 200.w,
+                  child: CustomElevatedButton(
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      cubit.submitLogin();
+                    },
+                  ),
+                ),
+                TextButton(
+                  child: const Text('Register'),
+                  onPressed: () {
+                    context.navigationService.createSignUpPageRoute(context);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
