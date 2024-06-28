@@ -1,4 +1,6 @@
 #Shop Management App
+
+
 Overview
 The Shop Management App is a Flutter-based application designed for managing products and orders effectively. It utilizes Firebase services for backend operations including authentication, storage, and Firestore for real-time data management.
 
@@ -20,18 +22,15 @@ To get started with the Shop Management App, follow these steps:
 
 Clone the repository:
 
-bash
-Copy code
+
 git clone https://github.com/mirza-d3x/shop_management_app.git
 Navigate to the project directory:
 
 bash
-Copy code
+
 cd shop_management_app
 Install dependencies:
 
-arduino
-Copy code
 flutter pub get
 Configure Firebase:
 
@@ -40,6 +39,4 @@ Add your Firebase configuration files (google-services.json for Android, GoogleS
 Enable Firebase Authentication, Firestore, and Firebase Storage in your Firebase project.
 Run the application:
 
-arduino
-Copy code
 flutter run
