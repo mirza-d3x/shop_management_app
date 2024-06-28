@@ -9,16 +9,17 @@ part 'order_state.dart';
 class OrderCubit extends Cubit<OrderState> {
   final OrderRepository _orderRepository;
 
-  List<OrderModel> _allOrders = [];
-
   OrderCubit(this._orderRepository) : super(OrderInitial()) {
     init();
   }
 
   late TextEditingController searchController;
+  String _currentSortType = '';
+  String _currentStatusFilter = '';
+  List<OrderModel> _allOrders = [];
 
   void init() {
-    searchController == TextEditingController();
+    searchController = TextEditingController();
     loadOrders(kUserId);
   }
 
@@ -55,34 +56,53 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   void searchOrders() {
-    final query = searchController.text.toLowerCase();
-    if (query.isEmpty) {
-      emit(OrderLoaded(_allOrders));
-    } else {
-      final filteredOrders = _allOrders.where((order) {
+    _applyFilters();
+  }
+
+  void sortOrders(String sortType) {
+    _currentSortType = sortType;
+    _applyFilters();
+  }
+
+  void filterByStatus(String status) {
+    _currentStatusFilter = status;
+    _applyFilters();
+  }
+
+  void _applyFilters() {
+    List<OrderModel> filteredOrders = _allOrders;
+
+    if (searchController.text.isNotEmpty) {
+      final query = searchController.text.toLowerCase();
+      filteredOrders = filteredOrders.where((order) {
         final matchesCustomerName =
             order.customerName.toLowerCase().contains(query);
         final matchesProductName = order.products
             .any((product) => product.name.toLowerCase().contains(query));
         final matchesTableNumber =
-            order.tableNumber?.toLowerCase().contains(query) ?? false;
+            order.tableNumber.toLowerCase().contains(query);
         return matchesCustomerName || matchesProductName || matchesTableNumber;
       }).toList();
-      emit(OrderLoaded(filteredOrders));
     }
-  }
 
-  void sortOrders(String sortType) {
-    List<OrderModel> sortedOrders = List.from(_allOrders);
-    if (sortType == 'Date Ascending') {
-      sortedOrders.sort((a, b) => a.orderDate.compareTo(b.orderDate));
-    } else if (sortType == 'Date Descending') {
-      sortedOrders.sort((a, b) => b.orderDate.compareTo(a.orderDate));
-    } else if (sortType == 'Total Price Ascending') {
-      sortedOrders.sort((a, b) => a.totalPrice.compareTo(b.totalPrice));
-    } else if (sortType == 'Total Price Descending') {
-      sortedOrders.sort((a, b) => b.totalPrice.compareTo(a.totalPrice));
+    if (_currentStatusFilter != 'All' && _currentStatusFilter.isNotEmpty) {
+      filteredOrders = filteredOrders
+          .where((order) => order.status == _currentStatusFilter)
+          .toList();
     }
-    emit(OrderLoaded(sortedOrders));
+
+    if (_currentSortType.isNotEmpty) {
+      if (_currentSortType == 'Date Ascending') {
+        filteredOrders.sort((a, b) => a.orderDate.compareTo(b.orderDate));
+      } else if (_currentSortType == 'Date Descending') {
+        filteredOrders.sort((a, b) => b.orderDate.compareTo(a.orderDate));
+      } else if (_currentSortType == 'Total Price Ascending') {
+        filteredOrders.sort((a, b) => a.totalPrice.compareTo(b.totalPrice));
+      } else if (_currentSortType == 'Total Price Descending') {
+        filteredOrders.sort((a, b) => b.totalPrice.compareTo(a.totalPrice));
+      }
+    }
+
+    emit(OrderLoaded(filteredOrders));
   }
 }

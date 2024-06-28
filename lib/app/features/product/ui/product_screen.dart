@@ -17,6 +17,31 @@ class ProductsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
+        actions: [
+          DropdownButton<String>(
+            icon: const Icon(Icons.filter_list),
+            onChanged: (String? value) {
+              if (value != null) {
+                cubit.filterByAvailability(value);
+              }
+            },
+            items: const [
+              DropdownMenuItem(
+                value: 'All',
+                child: Text('All'),
+              ),
+              DropdownMenuItem(
+                value: 'true',
+                child: Text('Available'),
+              ),
+              DropdownMenuItem(
+                value: 'false',
+                child: Text('Not Available'),
+              ),
+            ],
+          ),
+          SizedBox(width: 10.w),
+        ],
       ),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {

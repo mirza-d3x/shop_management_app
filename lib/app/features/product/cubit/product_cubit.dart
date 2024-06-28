@@ -17,6 +17,7 @@ class ProductCubit extends Cubit<ProductState> {
 
   late TextEditingController searchController;
   List<Product> _allProducts = [];
+  String _currentAvailabilityFilter = 'All'; // Default filter
 
   void init() {
     searchController = TextEditingController();
@@ -27,7 +28,7 @@ class ProductCubit extends Cubit<ProductState> {
     emit(ProductLoading());
     _productRepository.getProducts(userId).listen((products) {
       _allProducts = products;
-      emit(ProductLoaded(products));
+      _applyFilters(); // Apply filters after loading products
     }, onError: (error, stackTrace) {
       consoleLog("Error on getting products",
           error: error, stackTrace: stackTrace);
@@ -37,30 +38,45 @@ class ProductCubit extends Cubit<ProductState> {
 
   void searchProducts(String query) {
     emit(ProductLoading());
-    if (query.isEmpty) {
+    if (query.isEmpty && _currentAvailabilityFilter == 'All') {
       emit(ProductLoaded(_allProducts));
     } else {
       final filteredProducts = _allProducts
           .where((product) =>
-              product.name.toLowerCase().contains(query.toLowerCase()) ||
-              product.description.toLowerCase().contains(query.toLowerCase()))
+              (product.name.toLowerCase().contains(query.toLowerCase()) ||
+                  product.description
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) &&
+              (_currentAvailabilityFilter == 'All' ||
+                  product.isAvailable.toString() == _currentAvailabilityFilter))
           .toList();
       emit(ProductLoaded(filteredProducts));
     }
   }
 
-  Future<void> addProduct(Product product, String userId) async {
-    try {
-      await _productRepository.addProduct(product, userId);
-    } catch (e) {
-      emit(ProductError(e.toString()));
+  void filterByAvailability(String availability) {
+    _currentAvailabilityFilter = availability;
+    _applyFilters();
+  }
+
+  void _applyFilters() {
+    emit(ProductLoading());
+    List<Product> filteredProducts = _allProducts;
+
+    if (_currentAvailabilityFilter != 'All') {
+      final availabilityFilter = _currentAvailabilityFilter == 'true';
+      filteredProducts = _allProducts
+          .where((product) => product.isAvailable == availabilityFilter)
+          .toList();
     }
+
+    emit(ProductLoaded(filteredProducts));
   }
 
   Future<void> deleteProduct(String productId) async {
     try {
       await _productRepository.deleteProduct(productId);
-      emit(ProductLoaded(_allProducts));
+      loadProducts(kUserId); // Reload products after deleting
     } catch (e) {
       emit(ProductError(e.toString()));
     }

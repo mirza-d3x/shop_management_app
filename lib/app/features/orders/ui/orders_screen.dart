@@ -43,7 +43,34 @@ class OrdersScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(width: 10.w)
+          SizedBox(width: 10.w),
+          DropdownButton<String>(
+            icon: const Icon(Icons.filter_alt),
+            onChanged: (String? value) {
+              if (value != null) {
+                orderCubit.filterByStatus(value);
+              }
+            },
+            items: const [
+              DropdownMenuItem(
+                value: 'All',
+                child: Text('All'),
+              ),
+              DropdownMenuItem(
+                value: 'Pending',
+                child: Text('Pending'),
+              ),
+              DropdownMenuItem(
+                value: 'Completed',
+                child: Text('Completed'),
+              ),
+              DropdownMenuItem(
+                value: 'Cancelled',
+                child: Text('Cancelled'),
+              ),
+            ],
+          ),
+          SizedBox(width: 10.w),
         ],
       ),
       body: BlocBuilder<OrderCubit, OrderState>(
